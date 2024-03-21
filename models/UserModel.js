@@ -29,7 +29,7 @@ const User = db.define(
       allowNull: false,
     },
     contact: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     //   orders: {

@@ -1,6 +1,12 @@
 const router = require("express").Router();
+const User = require("../models/UserModel");
+const Order = require("../models/OrderModel");
 
-router.use("/api/orders", require("./api/orderRoute"));
-router.use("./api/orders/placeOrder", require("./api/orderRoute"))
+const authRoutes = require("./api/authRoute")(User);
+const orderRoutes = require("./api/orderRoute")(Order);
+
+// api endpoints
+router.use("/api/orders", orderRoutes);
+router.use("/api/auth", authRoutes)
 
 module.exports = router;

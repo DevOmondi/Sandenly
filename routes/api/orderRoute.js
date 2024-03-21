@@ -1,40 +1,46 @@
-const Order = require("../../models/OrderModel");
-const router = require("express").Router();
+const express = require("express");
 
-// Fetch orders from db
-router.get("/", (req, res) => {
-  Order.findAll()
-    .then((orders) => {
-      console.log("Available orders:", orders);
-      res.sendStatus(200);
+const orderRoutes = (Order) => {
+  const orderRouter = express.Router();
+
+  // Fetch orders from db
+  orderRouter.route("/all").get((req, res) => {
+    Order.findAll()
+      .then((orders) => {
+        // console.log("Available orders:", orders);
+        res.send(orders);
+      })
+      .catch((err) => {
+        console.log("An error occured:", err);
+      });
+  });
+
+  // Place order
+  orderRouter.route("/placeOrder").post((req, res) => {
+    const {
+      quantity,
+      delivery_date,
+      delivery_address,
+      order_status,
+      order_type,
+    } = req.body;
+    Order.create({
+      quantity,
+      delivery_date,
+      delivery_address,
+      order_status,
+      order_type,
     })
-    .catch((err) => {
-      console.log("An error occured:", err);
-    });
-});
+      .then((order) => {
+        console.log("Created orders", order);
+        res.send(order.dataValues);
+      })
+      .catch((err) => {
+        console.log("Couldn't add order", err);
+      });
+  });
 
-router.post("/placeOrder", (req, res) => {
-  const {
-    quantity,
-    delivery_date,
-    delivery_address,
-    order_status,
-    order_type,
-  } = req.body;
-  Order.create({
-    quantity,
-    delivery_date,
-    delivery_address,
-    order_status,
-    order_type,
-  })
-    .then((order) => {
-      console.log("Created orders", order);
-      res.send(order.dataValues)
-    })
-    .catch((err) => {
-      console.log("Couldn't add order", err);
-    });
-});
+  return orderRouter;
+};
 
-module.exports = router;
+module.exports = orderRoutes;
