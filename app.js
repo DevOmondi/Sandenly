@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const db = require("./db");
@@ -11,6 +12,7 @@ const port = process.env.SERVER_PORT || 5001;
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Sandenly app testing :)");

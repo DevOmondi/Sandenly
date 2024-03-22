@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const express = require("express");
 
+const issueJwt = require("../../utils/jwt");
+
 const authRoutes = (User) => {
   const authRouter = express.Router();
   //   Register new user
@@ -36,12 +38,18 @@ const authRoutes = (User) => {
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        res.status(400).json({ errorMessage: "Incorrect credentials" });
+        res.status(400).json({ errorMessage: "Incorrect password" });
       } else {
-        res.status(200).json({ message: "Successfully logged in" });
+        delete user.password;
+
+        const jwtToken = issueJwt(user.id);
+        
+        return res
+          .header("Authorization", jwtToken.token)
+          .json({ message: `${user.username} user successfully logged in` });
       }
     } catch (error) {
-        console.log("Sorry! couldn't log you in :", error)
+      console.log("Sorry! couldn't log you in :", error);
     }
   });
   return authRouter;
