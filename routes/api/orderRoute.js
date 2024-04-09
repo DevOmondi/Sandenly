@@ -1,10 +1,12 @@
 const express = require("express");
 
+const { verifyJwtToken } = require("../../utils/jwt");
+
 const orderRoutes = (Order) => {
   const orderRouter = express.Router();
 
   // Fetch orders from db
-  orderRouter.route("/all").get((req, res) => {
+  orderRouter.route("/all").get(verifyJwtToken, (req, res) => {
     Order.findAll()
       .then((orders) => {
         // console.log("Available orders:", orders);
@@ -24,6 +26,7 @@ const orderRoutes = (Order) => {
       order_status,
       order_type,
     } = req.body;
+
     Order.create({
       quantity,
       delivery_date,
@@ -39,6 +42,9 @@ const orderRoutes = (Order) => {
         console.log("Couldn't add order", err);
       });
   });
+
+  // Update order
+  orderRouter.route("/updateOrder").put();
 
   return orderRouter;
 };

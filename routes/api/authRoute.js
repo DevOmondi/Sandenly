@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const express = require("express");
 
-const issueJwt = require("../../utils/jwt");
+const { issueJwt } = require("../../utils/jwt");
 
 const authRoutes = (User) => {
   const authRouter = express.Router();
@@ -43,9 +43,10 @@ const authRoutes = (User) => {
         delete user.password;
 
         const jwtToken = issueJwt(user.id);
-        
+        const bearerTkn = jwtToken.token;
+
         return res
-          .header("Authorization", jwtToken.token)
+          .header("Authorization", bearerTkn)
           .json({ message: `${user.username} user successfully logged in` });
       }
     } catch (error) {
