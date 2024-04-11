@@ -45,7 +45,7 @@ const syncDb = async () => {
   }
   return db;
 };
-syncDb();
+// syncDb();
 
 // Set routing
 app.use(require("./routes"));

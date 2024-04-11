@@ -1,8 +1,8 @@
-const request = require("request");
+const axios = require("axios");
 require("dotenv").config();
 
 // FUNC: Get access token
-const getAccessToken = () => {
+const getAccessToken = async () => {
   const consumer_key = process.env.CONSUMER_KEY;
   const consumer_secret = process.env.CONSUMER_SECRET;
   const url =
@@ -12,24 +12,19 @@ const getAccessToken = () => {
     "Basic " +
     new Buffer.from(consumer_key + ":" + consumer_secret).toString("base64");
 
-  request(
-    {
-      url: url,
+  //  Get access token using axios
+  try {
+    const response = await axios.get(url, {
       headers: {
         Authorization: auth,
       },
-    },
-    (error, response, body) => {
-      if (error) {
-        console.log("An error occured: ", error);
-      } else {
-        // console.log(body)
-        const access_token = JSON.parse(body).access_token;
-        console.log(access_token);
-        return access_token;
-      }
-    }
-  );
+    });
+    const accessToken = response.data.access_token;
+    console.log(accessToken);
+    return accessToken;
+  } catch (error) {
+    throw error;
+  }
 };
 
 module.exports = getAccessToken;
