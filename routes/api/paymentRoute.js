@@ -47,7 +47,8 @@ const paymentRoutes = () => {
               PartyA: "254796178227",
               PartyB: "174379",
               PhoneNumber: "254796178227",
-              CallBackURL: "https://5cd7-102-219-208-161.ngrok-free.app/api/payment/callback",
+              CallBackURL:
+                "https://5cd7-102-219-208-161.ngrok-free.app/api/payment/callback",
               AccountReference: "Sandenly",
               TransactionDesc: "Test STK push from Sandenly",
             },
@@ -90,6 +91,40 @@ const paymentRoutes = () => {
     console.log(req.body);
   });
 
+  // MPESA C2B register URL route
+  paymentRouter.route("/registerURL").get((req, res) => {
+    getAccessToken()
+      .then((accessToken) => {
+        const url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl";
+        const auth = "Bearer " + accessToken;
+
+        axios
+          .post(
+            url,
+            {
+              ShortCode: "174379",
+              ResponseType: "Completed",
+              ConfirmationURL: "https://mydomain.com/confirmation",
+              ValidationURL: "https://mydomain.com/validation",
+            },
+            {
+              headers: {
+                Authorization: auth,
+              },
+            }
+          )
+          .then((response) => {
+            res.status(200).json(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.json({ errorMessage: `❌ Couldn't register url: ${error}` });
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
   return paymentRouter;
 };
 
