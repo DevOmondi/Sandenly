@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 require("dotenv").config();
 
 const db = require("./db");
@@ -13,6 +14,7 @@ const port = process.env.SERVER_PORT || 5001;
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Sandenly app testing :)");
@@ -39,13 +41,13 @@ const syncDb = async () => {
     console.log(`Synced to ${process.env.DB_NAME} database successfully`);
   } catch (error) {
     console.error(
-      `Unable to connect to the ${process.env.DB_NAME} database:(`,
+      `Unable to sync with the ${process.env.DB_NAME} database:(`,
       error
     );
   }
   return db;
 };
-// syncDb();
+syncDb();
 
 // Set routing
 app.use(require("./routes"));

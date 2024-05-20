@@ -1,7 +1,9 @@
 import React from "react";
-import sandenlyLogo from "../../public/sandenly_logo.png";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import sandenlyLogo from "../../public/sandenly_logo.png";
 
 const Header = () => {
   return (
@@ -30,9 +32,11 @@ const Header = () => {
             Sign Up
           </button>
         </Link>
-        <button className="text-white rounded-md text-[0.8rem] py-[0.6rem] px-[1rem] transition ease-in-out delay-150 bg-secondary-brown hover:-translate-y-1 hover:scale-110 hover:bg-primary-brown duration-300 ">
-          Log In
-        </button>
+        <Link href={"/login"}>
+          <button className="text-white rounded-md text-[0.8rem] py-[0.6rem] px-[1rem] transition ease-in-out delay-150 bg-secondary-brown hover:-translate-y-1 hover:scale-110 hover:bg-primary-brown duration-300 ">
+            Log In
+          </button>
+        </Link>
       </div>
     </div>
   );

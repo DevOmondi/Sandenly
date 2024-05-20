@@ -44,9 +44,9 @@ const paymentRoutes = () => {
               Timestamp: timestamp,
               TransactionType: "CustomerPayBillOnline",
               Amount: "1",
-              PartyA: "254796178227",
+              PartyA: "254759214435",
               PartyB: "174379",
-              PhoneNumber: "254796178227",
+              PhoneNumber: "254759214435",
               CallBackURL:
                 "https://5cd7-102-219-208-161.ngrok-free.app/api/payment/callback",
               AccountReference: "Sandenly",

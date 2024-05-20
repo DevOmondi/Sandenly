@@ -10,10 +10,15 @@ const User = db.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    username: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false,
     },
     email: {
       type: DataTypes.STRING,
@@ -22,7 +27,7 @@ const User = db.define(
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     category: {
       type: DataTypes.STRING,
@@ -32,6 +37,11 @@ const User = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    company: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: false
+    }
     //   orders: {
     //     type: DataTypes.ARRAY,
     //     allowNull: true,
