@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const express = require("express");
+require("dotenv").config();
+const {OAuth2Client} = require("google-auth-library");
 
 const { issueJwt } = require("../../utils/jwt");
 
@@ -55,6 +57,27 @@ const authRoutes = (User) => {
     } catch (error) {
       console.log("Sorry! couldn't log you in :", error);
     }
+  });
+
+  // Login with google || generate Auth url
+  authRouter.route("/googleAuthUrl").post(async (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Referrer-Policy", "no-referrer-when-downgrade");
+
+    const redirectUrl = "http://localhost:3000/home"
+
+    const oAuth2Client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      redirectUrl
+    )
+
+    const authorizationUrl = oAuth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: "https://www.googleapis.com/auth/userinfo.profile openid",
+      prompt: "consent"
+    })
+    res.json({url:authorizationUrl})
   });
   return authRouter;
 };

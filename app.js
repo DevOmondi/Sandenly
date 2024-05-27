@@ -20,6 +20,9 @@ app.get("/", (req, res) => {
   res.send("Sandenly app testing :)");
 });
 
+app.get("/dashboard", (req, res) => {
+  res.send("Welcome");
+})
 // Start server
 app.listen(port, (error) => {
   if (error) {

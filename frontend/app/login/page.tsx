@@ -8,11 +8,13 @@ import axios from "axios";
 
 import Image from "next/image";
 import Link from "next/link";
+// import { useRouter } from "next/navigation";
 
 import sandenlyLogo from "../../public/sandenly_logo.png";
 import { config } from "../../config";
 
 const LoginForm = () => {
+  // const router = useRouter();
   // Inputs state management
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +45,31 @@ const LoginForm = () => {
       }
     }
   };
+
+  // TODO: Func to handle navigation to google Auth window.
+  function navigate(url: string) {
+    window.location.href = url;
+  }
+
+  // TODO: Func to handle login with google
+  const handleLoginWithGoogle = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    const url = config.DEV_API_URL;
+    try {
+      const response = await fetch(`${url}/api/auth/googleAuthUrl`, {
+        method: "POST",
+      });
+      const data = await response.json();
+      const googleAuthUrl = data.url;
+      // console.log("AuthUrl:", googleAuthUrl);
+      navigate(googleAuthUrl);
+      // router.push(`/${googleAuthUrl}`);
+    } catch (err) {
+      console.log("AuthUrl error occured:", err);
+    }
+  };
   return (
     <>
       <div className="max-w-lg mx-auto my-10 bg-white px-8 pb-3 rounded-xl shadow shadow-slate-300">
@@ -57,13 +84,16 @@ const LoginForm = () => {
         <p className="text-primary-brown font-bold">Hi, Welcome back 👋</p>
 
         <div className="my-5">
-          <button className="w-full text-center py-3 my-3 border flex space-x-2 items-center justify-center border-slate-200 rounded-lg text-slate-700 hover:border-secondary-brown hover:text-slate-900 hover:shadow transition duration-150">
+          <button
+            onClick={handleLoginWithGoogle}
+            className="w-full text-center py-3 my-3 border flex space-x-2 items-center justify-center border-slate-200 rounded-lg text-slate-700 hover:border-secondary-brown hover:text-slate-900 hover:shadow transition duration-150"
+          >
             <Image
               src="https://www.svgrepo.com/show/355037/google.svg"
               className="w-6 h-6"
               width={20}
               height={20}
-              alt=""
+              alt="Google icon"
             />{" "}
             <span className="text-secondary-brown">Login with Google</span>
           </button>
